@@ -1,0 +1,121 @@
+:root {
+  --navy: #03045e;
+  --aqua: #90e0ef;
+  --mist: #dee2e6;
+  --orange: #f26419;
+  --white: #ffffff;
+
+  color-scheme: light;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #dee2e6 0%, #e9eef1 100%);
+  color: var(--navy);
+}
+
+.app-shell {
+  max-width: 1050px;
+  margin: 1.5rem auto;
+  padding: 0 1rem 2rem;
+}
+
+header h1 {
+  margin-bottom: 0.2rem;
+  color: var(--navy);
+}
+
+header p {
+  margin-top: 0;
+  color: rgba(3, 4, 94, 0.78);
+}
+
+.card {
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid rgba(3, 4, 94, 0.12);
+  box-shadow: 0 8px 20px rgba(3, 4, 94, 0.08);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.results.card {
+  border-top: 6px solid var(--aqua);
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--navy);
+}
+
+input,
+select {
+  margin-top: 0.35rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(3, 4, 94, 0.24);
+  background: #f8fbfc;
+  color: var(--navy);
+  font-size: 0.95rem;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(242, 100, 25, 0.2);
+}
+
+.inline-input {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+small {
+  margin-top: 0.25rem;
+  font-weight: 400;
+  color: rgba(3, 4, 94, 0.75);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.65rem;
+  border-bottom: 1px solid rgba(3, 4, 94, 0.12);
+  text-align: left;
+}
+
+th {
+  background: rgba(144, 224, 239, 0.35);
+  color: var(--navy);
+  font-size: 0.9rem;
+}
+
+td:first-child {
+  font-weight: 600;
+}
+
+.table-note {
+  margin: 0.75rem 0 0;
+  color: rgba(3, 4, 94, 0.75);
+  font-size: 0.92rem;
+  border-left: 4px solid var(--orange);
+  padding-left: 0.6rem;
+}
