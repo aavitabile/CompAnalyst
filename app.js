@@ -26,7 +26,6 @@ const clearanceSelect = document.getElementById("clearanceSelect");
 const premiumInput = document.getElementById("premiumInput");
 const premiumGuidance = document.getElementById("premiumGuidance");
 const summaryBody = document.getElementById("summaryBody");
-const rawDataBody = document.getElementById("rawDataBody");
 
 function percentile(values, p) {
   const sorted = [...values].sort((a, b) => a - b);
@@ -66,16 +65,6 @@ function clampPremiumRate(value) {
   if (value < 0) return 0;
   if (value > 60) return 60;
   return value;
-}
-
-function renderRawDataTable() {
-  rawDataBody.innerHTML = "";
-
-  Object.entries(laborCategorySalaries).forEach(([category, salaries]) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td>${category}</td><td>${salaries.map((s) => formatCurrency(s)).join(", ")}</td>`;
-    rawDataBody.appendChild(row);
-  });
 }
 
 function renderSummary() {
@@ -139,6 +128,5 @@ function initializeControls() {
 }
 
 initializeControls();
-renderRawDataTable();
 updatePremiumGuidance();
 renderSummary();
