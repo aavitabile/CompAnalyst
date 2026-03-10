@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CompAnalyst - Salary Compensation Explorer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header>
+      <h1>Salary Compensation Explorer</h1>
+      <p>Analyze labor category rates, view percentiles, age rates, and apply GovCon-aligned security clearance premiums.</p>
+    </header>
+
+    <section class="controls card" aria-label="Compensation controls">
+      <div class="control-grid">
+        <label>
+          Labor Category
+          <select id="categorySelect"></select>
+        </label>
+
+        <label>
+          Age Rates By
+          <div class="inline-input">
+            <input id="agingInput" type="number" min="1" max="4" step="0.1" value="2" />
+            <span>%</span>
+          </div>
+          <small>Allowed range: 1% to 4%</small>
+        </label>
+
+        <label>
+          Security Clearance
+          <select id="clearanceSelect"></select>
+        </label>
+
+        <label>
+          Clearance Premium
+          <div class="inline-input">
+            <input id="premiumInput" type="number" min="0" max="60" step="0.1" value="0" />
+            <span>%</span>
+          </div>
+          <small id="premiumGuidance">Select a clearance to auto-fill the baseline premium value.</small>
+        </label>
+      </div>
+    </section>
+
+    <section class="results card" aria-live="polite">
+      <h2>Rate Summary</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Percentile</th>
+            <th>Base Rate</th>
+            <th>Aged Rate</th>
+            <th>Aged + Clearance Premium</th>
+          </tr>
+        </thead>
+        <tbody id="summaryBody"></tbody>
+      </table>
+    </section>
+
+    <section class="data card">
+      <h2>Clearance Premium Baselines</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Clearance</th>
+            <th>Baseline Premium</th>
+            <th>Default Used in Tool</th>
+          </tr>
+        </thead>
+        <tbody id="clearanceTableBody"></tbody>
+      </table>
+    </section>
+
+    <section class="data card">
+      <h2>Sample Labor Category Data</h2>
+      <p>Base hourly rates used for percentile calculations.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Labor Category</th>
+            <th>Rates ($/hr)</th>
+          </tr>
+        </thead>
+        <tbody id="rawDataBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
