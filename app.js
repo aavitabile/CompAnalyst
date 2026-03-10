@@ -1,9 +1,9 @@
-const laborCategoryRates = {
-  "Software Engineer": [62, 70, 74, 82, 89, 95, 102, 110],
-  "Data Scientist": [68, 75, 79, 84, 90, 98, 106, 114],
-  "Cybersecurity Analyst": [58, 64, 69, 76, 83, 92, 100, 108],
-  "Program Manager": [72, 80, 86, 93, 101, 109, 118, 128],
-  "Cloud Architect": [78, 85, 91, 99, 108, 116, 125, 135],
+const laborCategorySalaries = {
+  "Software Engineer": [115000, 128000, 136000, 145000, 158000, 171000, 184000, 198000],
+  "Data Scientist": [122000, 134000, 142000, 151000, 164000, 178000, 191000, 205000],
+  "Cybersecurity Analyst": [105000, 116000, 124000, 133000, 145000, 157000, 170000, 184000],
+  "Program Manager": [130000, 142000, 151000, 163000, 176000, 189000, 204000, 220000],
+  "Cloud Architect": [142000, 155000, 164000, 176000, 191000, 205000, 221000, 238000],
 };
 
 const clearancePremiums = {
@@ -14,6 +14,12 @@ const clearancePremiums = {
   "TS/SCI w/Poly": { min: 30, max: 30, default: 30 },
 };
 
+const percentileDefinitions = [
+  { value: 25, label: "P25 - Low" },
+  { value: 50, label: "P50 - Median" },
+  { value: 75, label: "P75 - High" },
+];
+
 const categorySelect = document.getElementById("categorySelect");
 const agingInput = document.getElementById("agingInput");
 const clearanceSelect = document.getElementById("clearanceSelect");
@@ -21,7 +27,6 @@ const premiumInput = document.getElementById("premiumInput");
 const premiumGuidance = document.getElementById("premiumGuidance");
 const summaryBody = document.getElementById("summaryBody");
 const rawDataBody = document.getElementById("rawDataBody");
-const clearanceTableBody = document.getElementById("clearanceTableBody");
 
 function percentile(values, p) {
   const sorted = [...values].sort((a, b) => a - b);
@@ -38,7 +43,11 @@ function percentile(values, p) {
 }
 
 function formatCurrency(rate) {
-  return `$${rate.toFixed(2)}`;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(rate);
 }
 
 function formatPremiumRange(min, max) {
@@ -62,47 +71,33 @@ function clampPremiumRate(value) {
 function renderRawDataTable() {
   rawDataBody.innerHTML = "";
 
-  Object.entries(laborCategoryRates).forEach(([category, rates]) => {
+  Object.entries(laborCategorySalaries).forEach(([category, salaries]) => {
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${category}</td><td>${rates.map((r) => formatCurrency(r)).join(", ")}</td>`;
+    row.innerHTML = `<td>${category}</td><td>${salaries.map((s) => formatCurrency(s)).join(", ")}</td>`;
     rawDataBody.appendChild(row);
-  });
-}
-
-function renderClearanceTable() {
-  clearanceTableBody.innerHTML = "";
-
-  Object.entries(clearancePremiums).forEach(([clearance, premium]) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td>${clearance}</td><td>${formatPremiumRange(premium.min, premium.max)}</td><td>${premium.default}%</td>`;
-    clearanceTableBody.appendChild(row);
   });
 }
 
 function renderSummary() {
   const category = categorySelect.value;
-  const rates = laborCategoryRates[category] ?? [];
+  const salaries = laborCategorySalaries[category] ?? [];
 
   const agingPct = clampAgingRate(parseFloat(agingInput.value));
   agingInput.value = agingPct;
   const premiumPct = clampPremiumRate(parseFloat(premiumInput.value));
   premiumInput.value = premiumPct;
 
-  const percentiles = [25, 50, 75, 90];
-
   summaryBody.innerHTML = "";
 
-  percentiles.forEach((p) => {
-    const base = percentile(rates, p);
-    const aged = base * (1 + agingPct / 100);
-    const agedWithPremium = aged * (1 + premiumPct / 100);
+  percentileDefinitions.forEach(({ value, label }) => {
+    const base = percentile(salaries, value);
+    const agedSalary = base * (1 + agingPct / 100);
+    const adjustedSalary = agedSalary * (1 + premiumPct / 100);
 
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>P${p}</td>
-      <td>${formatCurrency(base)}</td>
-      <td>${formatCurrency(aged)}</td>
-      <td>${formatCurrency(agedWithPremium)}</td>
+      <td>${label}</td>
+      <td>${formatCurrency(adjustedSalary)}</td>
     `;
     summaryBody.appendChild(row);
   });
@@ -115,7 +110,7 @@ function updatePremiumGuidance() {
 }
 
 function initializeControls() {
-  Object.keys(laborCategoryRates).forEach((category) => {
+  Object.keys(laborCategorySalaries).forEach((category) => {
     const option = document.createElement("option");
     option.value = category;
     option.textContent = category;
@@ -129,7 +124,7 @@ function initializeControls() {
     clearanceSelect.appendChild(option);
   });
 
-  categorySelect.value = Object.keys(laborCategoryRates)[0];
+  categorySelect.value = Object.keys(laborCategorySalaries)[0];
   clearanceSelect.value = "None";
 
   clearanceSelect.addEventListener("change", () => {
@@ -145,6 +140,5 @@ function initializeControls() {
 
 initializeControls();
 renderRawDataTable();
-renderClearanceTable();
 updatePremiumGuidance();
 renderSummary();
